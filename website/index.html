@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexusChat — 多帳號即時通訊</title>
+  <meta name="description" content="一個 App，管理所有 WhatsApp、Telegram、Messenger 帳號。支援 Mac 及 Windows。" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #7c3aed;
+      --accent-light: #a78bfa;
+      --bg: #0f0f1a;
+      --surface: #1a1a2e;
+      --border: rgba(255,255,255,0.08);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Hero */
+    .hero {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 24px 60px;
+      text-align: center;
+    }
+
+    .app-icon {
+      width: 120px;
+      height: 120px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #2d1b69, #7c3aed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      font-weight: 900;
+      color: white;
+      margin: 0 auto 32px;
+      box-shadow: 0 20px 60px rgba(124, 58, 237, 0.4);
+    }
+
+    h1 {
+      font-size: clamp(36px, 6vw, 60px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #e2e8f0, var(--accent-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
+
+    .tagline {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto 48px;
+      line-height: 1.6;
+    }
+
+    /* Download buttons */
+    .download-grid {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .dl-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 28px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+
+    .dl-btn:hover {
+      background: rgba(124,58,237,0.15);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(124,58,237,0.2);
+    }
+
+    .dl-btn.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .dl-btn.primary:hover {
+      background: #6d28d9;
+      border-color: #6d28d9;
+    }
+
+    .dl-icon { font-size: 24px; }
+    .dl-info { text-align: left; }
+    .dl-label { display: block; font-size: 13px; color: var(--muted); font-weight: 500; }
+    .dl-name { display: block; font-size: 15px; font-weight: 700; }
+
+    .version-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 64px;
+    }
+
+    /* Features */
+    .features {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .features h2 {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 40px;
+      color: var(--text);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .feature-icon { font-size: 32px; margin-bottom: 12px; }
+    .feature-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* Platforms */
+    .platforms {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 64px;
+    }
+
+    .platform-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* Install note */
+    .install-note {
+      max-width: 600px;
+      margin: 0 auto 40px;
+      padding: 20px 24px;
+      background: rgba(124,58,237,0.08);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 12px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      text-align: left;
+    }
+    .install-note strong { color: var(--text); }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    footer a { color: var(--accent-light); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="app-icon">N</div>
+    <h1>NexusChat</h1>
+    <p class="tagline">一個 App，管理所有 WhatsApp、Telegram 及 Messenger 帳號。告別多個視窗切換。</p>
+
+    <div class="download-grid">
+      <a class="dl-btn primary" href="https://github.com/mileslor/nexus-chat/releases/latest/download/NexusChat.dmg" id="btn-mac">
+        <span class="dl-icon"></span>
+        <span class="dl-info">
+          <span class="dl-label">Download for</span>
+          <span class="dl-name">macOS</span>
+        </span>
+      </a>
+      <a class="dl-btn" href="https://github.com/mileslor/nexus-chat/releases/latest/download/NexusChatSetup.exe" id="btn-win">
+        <span class="dl-icon">🖥</span>
+        <span class="dl-info">
+          <span class="dl-label">Download for</span>
+          <span class="dl-name">Windows</span>
+        </span>
+      </a>
+    </div>
+
+    <p class="version-note">Version 1.0.0 · macOS 12+ · Windows 10+</p>
+
+    <div class="install-note">
+      <strong>macOS 首次安裝提示：</strong> 由於 App 暫未通過 Apple 公證，首次開啟時請<strong>右鍵點按 → 開啟</strong>，再確認即可正常使用。
+    </div>
+
+    <div class="platforms">
+      <div class="platform-chip"><span>💬</span> WhatsApp</div>
+      <div class="platform-chip"><span>✈️</span> Telegram</div>
+      <div class="platform-chip"><span>⚡</span> Messenger</div>
+    </div>
+  </div>
+
+  <div class="features">
+    <h2>為什麼選擇 NexusChat？</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">👥</div>
+        <div class="feature-title">多帳號同時登入</div>
+        <div class="feature-desc">工作、私人帳號同時在線，隨時一鍵切換，完全獨立 Cookie 及 Session。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔔</div>
+        <div class="feature-title">統一通知管理</div>
+        <div class="feature-desc">所有帳號嘅新訊息通知統一顯示，Dock badge 顯示未讀總數。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <div class="feature-title">自動斷線重連</div>
+        <div class="feature-desc">網絡不穩自動重連，唔使手動刷新，保持持續在線狀態。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌙</div>
+        <div class="feature-title">原生深色模式</div>
+        <div class="feature-desc">完美融入 macOS / Windows 深色模式，護眼舒適。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">自動更新</div>
+        <div class="feature-desc">背景自動下載最新版本，確保你永遠使用最新功能。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <div class="feature-title">本地資料安全</div>
+        <div class="feature-desc">所有 Session 資料儲存喺本機，唔會上傳任何個人資料至第三方。</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>NexusChat 係獨立第三方應用程式，與 Meta、Telegram 或 Facebook 無關。</p>
+    <p style="margin-top:8px">
+      © 2026 <a href="https://hkmilestone.com">Milestone Technology</a> ·
+      <a href="https://github.com/mileslor/nexus-chat">GitHub</a>
+    </p>
+  </footer>
+
+  <script>
+    // Auto-detect platform and highlight the right button
+    const isMac = navigator.platform.includes('Mac') || navigator.userAgent.includes('Mac');
+    const isWin = navigator.platform.includes('Win') || navigator.userAgent.includes('Win');
+    if (!isMac && isWin) {
+      document.getElementById('btn-win').classList.add('primary');
+      document.getElementById('btn-mac').classList.remove('primary');
+    }
+  </script>
+</body>
+</html>
