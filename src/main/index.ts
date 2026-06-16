@@ -31,6 +31,7 @@ let currentSettings: AppSettings = loadSettings();
 const accounts: Account[] = [];
 const views = new Map<string, WebContentsView>();
 const unreadCounts = new Map<string, number>();
+const prevUnreadCounts = new Map<string, number>();
 const reconnectTimers = new Map<string, ReturnType<typeof setTimeout>>();
 const reconnectAttempts = new Map<string, number>();
 let activeAccountId: string | null = null;
@@ -97,8 +98,16 @@ function createView(account: Account): WebContentsView {
   view.webContents.on('page-title-updated', (_e, title) => {
     const unreadMatch = title.match(/^\((\d+)\)/);
     const unread = unreadMatch ? parseInt(unreadMatch[1]) : 0;
+    const prev = prevUnreadCounts.get(account.id) ?? 0;
+    prevUnreadCounts.set(account.id, unread);
     unreadCounts.set(account.id, unread);
     updateTrayBadge();
+    if (currentSettings.showNotifications && unread > prev && (!mainWindow || !mainWindow.isFocused())) {
+      new Notification({
+        title: account.label || platform.name,
+        body: `你有 ${unread} 條新訊息`,
+      }).show();
+    }
     broadcastState({
       accountId: account.id,
       status: 'active',
