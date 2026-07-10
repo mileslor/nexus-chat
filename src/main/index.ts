@@ -74,7 +74,13 @@ function createView(account: Account): WebContentsView {
   const partition = `persist:${account.sessionPartition}`;
 
   const ses = session.fromPartition(partition);
-  if (platform.userAgent) ses.setUserAgent(platform.userAgent);
+  if (platform.userAgent) {
+    // Keep the advertised Chrome version in sync with the actual bundled
+    // Chromium — a stale version here causes WhatsApp Web's browser-support
+    // check to mismatch its own Client Hints headers and fail to render.
+    const ua = platform.userAgent.replace(/Chrome\/[\d.]+/, `Chrome/${process.versions.chrome}`);
+    ses.setUserAgent(ua);
+  }
 
   ses.setPermissionRequestHandler((_wc, permission, callback) => {
     const allowed = ['notifications', 'media'];
@@ -88,7 +94,10 @@ function createView(account: Account): WebContentsView {
       partition,
       nodeIntegration: false,
       contextIsolation: true,
-      sandbox: false, // required for preload injection
+      // webview.ts only patches window.Notification via plain DOM APIs — no
+      // Node access needed, so it works fine sandboxed. sandbox:false was
+      // crashing the renderer (SIGSEGV) on WhatsApp Web's WASM/thread code.
+      sandbox: true,
       preload: webviewPreloadPath,
     },
   });

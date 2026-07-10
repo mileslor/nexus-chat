@@ -55,7 +55,9 @@ html, body, #root {
   flex-shrink: 0;
 }
 
-.sidebar > * {
+.account-btn,
+.add-btn,
+.settings-btn {
   -webkit-app-region: no-drag;
 }
 
